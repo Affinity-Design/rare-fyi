@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Card } from "@/components/ui/card";
 
 // Card 1: Security Shuffler
 function SecurityShuffler() {
@@ -27,18 +26,18 @@ function SecurityShuffler() {
   }, []);
 
   return (
-    <Card className="relative h-64 p-6 overflow-hidden bg-bg-secondary/80">
-      <h3 className="text-lg font-medium text-gold-primary mb-4">
+    <div className="relative h-72 p-6 overflow-hidden rounded-3xl bg-[#0A0A0A] border border-white/10">
+      <h3 className="text-lg font-semibold text-[#D4AF37] mb-4">
         Bot-Proof Intelligence
       </h3>
-      <div className="relative h-40">
+      <div className="relative h-48">
         <AnimatePresence mode="popLayout">
           {cards.map((card, index) => (
             <motion.div
               key={card.title}
               initial={{ y: 60, opacity: 0, scale: 0.95 }}
               animate={{
-                y: index * 24,
+                y: index * 28,
                 opacity: 1 - index * 0.25,
                 scale: 1 - index * 0.05,
                 zIndex: 3 - index,
@@ -51,13 +50,13 @@ function SecurityShuffler() {
               }}
               className="absolute left-0 right-0 bg-white/5 border border-white/10 rounded-xl p-4"
             >
-              <div className="text-white font-medium">{card.title}</div>
-              <div className="text-white/50 text-sm">{card.desc}</div>
+              <div className="text-white font-medium text-sm">{card.title}</div>
+              <div className="text-white/50 text-xs mt-1">{card.desc}</div>
             </motion.div>
           ))}
         </AnimatePresence>
       </div>
-    </Card>
+    </div>
   );
 }
 
@@ -99,27 +98,29 @@ function TelemetryTypewriter() {
   }, [currentMessage]);
 
   return (
-    <Card className="relative h-64 p-6 bg-bg-secondary/80">
+    <div className="relative h-72 p-6 rounded-3xl bg-[#0A0A0A] border border-white/10">
       <div className="flex items-center gap-2 mb-4">
-        <h3 className="text-lg font-medium text-gold-primary">
+        <h3 className="text-lg font-semibold text-[#D4AF37]">
           Distribution Stream
         </h3>
         <span className="relative flex h-2 w-2">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
           <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
         </span>
+        <span className="text-xs text-white/40 ml-1">LIVE</span>
       </div>
-      <div className="h-40 flex items-center">
-        <div className="font-mono text-sm text-white/80">
-          <span className="text-gold-primary">&gt;</span> {displayedText}
+      <div className="h-48 flex items-center">
+        <div className="font-mono text-sm text-white/80 leading-relaxed">
+          <span className="text-[#D4AF37] mr-2">&gt;</span>
+          <span>{displayedText}</span>
           <motion.span
             animate={{ opacity: [1, 0] }}
             transition={{ duration: 0.8, repeat: Infinity }}
-            className="inline-block w-2 h-5 bg-gold-primary ml-0.5 align-middle"
+            className="inline-block w-2 h-4 bg-[#D4AF37] ml-0.5 align-middle"
           />
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
 
@@ -128,15 +129,14 @@ function ProtocolScheduler() {
   const days = ["S", "M", "T", "W", "T", "F", "S"];
   const [activeDay, setActiveDay] = useState<number | null>(null);
   const [cursorPos, setCursorPos] = useState({ x: -30, y: 20 });
-  const [phase, setPhase] = useState(0);
 
   useEffect(() => {
     const phases = [
-      { day: 3, duration: 1500 },  // Move to Wednesday
-      { day: 3, click: true, duration: 500 },  // Click
-      { day: 3, duration: 1000 },  // Pause
-      { target: "claim", duration: 1500 },  // Move to claim button
-      { reset: true, duration: 2000 },  // Reset
+      { day: 3, duration: 1500 },
+      { day: 3, click: true, duration: 500 },
+      { day: 3, duration: 1000 },
+      { target: "claim", duration: 1500 },
+      { reset: true, duration: 2000 },
     ];
 
     let phaseIndex = 0;
@@ -146,7 +146,6 @@ function ProtocolScheduler() {
       if (p.reset) {
         setActiveDay(null);
         setCursorPos({ x: -30, y: 20 });
-        setPhase(0);
       } else if (p.target === "claim") {
         setCursorPos({ x: 140, y: 70 });
       } else if (p.click) {
@@ -167,8 +166,8 @@ function ProtocolScheduler() {
   }, []);
 
   return (
-    <Card className="relative h-64 p-6 bg-bg-secondary/80 overflow-hidden">
-      <h3 className="text-lg font-medium text-gold-primary mb-4">
+    <div className="relative h-72 p-6 rounded-3xl bg-[#0A0A0A] border border-white/10 overflow-hidden">
+      <h3 className="text-lg font-semibold text-[#D4AF37] mb-4">
         Adaptive Protocol
       </h3>
       <div className="relative">
@@ -177,9 +176,9 @@ function ProtocolScheduler() {
           {days.map((day, i) => (
             <div
               key={i}
-              className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-all duration-300 ${
+              className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-medium transition-all duration-300 ${
                 activeDay === i
-                  ? "bg-gold-primary text-black"
+                  ? "bg-[#D4AF37] text-black"
                   : "bg-white/5 text-white/50"
               }`}
             >
@@ -189,7 +188,7 @@ function ProtocolScheduler() {
         </div>
 
         {/* Claim button */}
-        <button className="px-4 py-2 rounded-lg bg-gold-primary/20 text-gold-primary text-sm border border-gold-primary/30">
+        <button className="px-4 py-2 rounded-lg bg-[#D4AF37]/20 text-[#D4AF37] text-sm font-medium border border-[#D4AF37]/30 hover:bg-[#D4AF37]/30 transition-colors">
           Claim
         </button>
 
@@ -209,13 +208,13 @@ function ProtocolScheduler() {
           />
         </motion.svg>
       </div>
-    </Card>
+    </div>
   );
 }
 
 export default function Features() {
   return (
-    <section id="features" className="py-24 px-6 md:px-12 lg:px-24 bg-bg-secondary">
+    <section id="features" className="py-24 px-6 md:px-12 lg:px-24 bg-[#080808]">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -224,8 +223,8 @@ export default function Features() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Bot-Proof Micro-UI
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+            Bot-Proof <span className="text-[#D4AF37]">Micro-UI</span>
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mx-auto">
             Interactive functional artifacts showcasing our security-first distribution system
