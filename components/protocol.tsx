@@ -1,235 +1,190 @@
 "use client";
 
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 
-// Helper to create blur filter string from motion value
-function useBlur(blur: MotionValue<number>) {
-  return useTransform(blur, (v) => `blur(${v}px)`);
+function ProtocolCard({ 
+  title, 
+  description, 
+  children,
+  index 
+}: { 
+  title: string; 
+  description: string; 
+  children: React.ReactNode;
+  index: number;
+}) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "center center"],
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
+  const blur = useTransform(scrollYProgress, [0, 1], [0, 20]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.5]);
+
+  return (
+    <motion.div
+      ref={ref}
+      style={{ scale, opacity }}
+      className="sticky top-20 min-h-[80vh] flex items-center justify-center p-6"
+    >
+      <motion.div
+        style={{ filter: useTransform(blur, (v) => `blur(${v}px)`) }}
+        className="w-full max-w-4xl bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 md:p-12"
+      >
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <span className="text-sm font-medium text-[#9D00FF] mb-2 block">
+              Protocol {index + 1}
+            </span>
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              {title}
+            </h3>
+            <p className="text-white/60 leading-relaxed">
+              {description}
+            </p>
+          </div>
+          <div className="flex items-center justify-center">
+            {children}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
 }
 
-// Card 1: Rotating Gold Coin
-function GoldCoinCard() {
+// Animated circle logo
+function RotatingLogo() {
   return (
-    <div className="h-full flex flex-col items-center justify-center p-8 md:p-12">
-      <div className="relative">
-        {/* Glow effect */}
-        <motion.div
-          animate={{
-            boxShadow: [
-              "0 0 60px rgba(212,175,55,0.3)",
-              "0 0 100px rgba(212,175,55,0.5)",
-              "0 0 60px rgba(212,175,55,0.3)",
-            ],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-0 rounded-full"
-        />
-        
-        {/* Coin */}
-        <motion.div
-          animate={{ rotateY: 360 }}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-          className="relative w-32 h-32 md:w-48 md:h-48"
-          style={{ transformStyle: "preserve-3d" }}
-        >
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#E5C558] via-[#D4AF37] to-[#B8952E] flex items-center justify-center shadow-2xl">
-            <span className="text-5xl md:text-7xl font-bold text-black/80">R</span>
-          </div>
-          {/* Edge effect */}
-          <div className="absolute inset-0 rounded-full border-4 border-[#E5C558]/50" />
-        </motion.div>
+    <div className="relative w-48 h-48">
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-0 rounded-full bg-gradient-to-br from-[#E91E63] via-[#9D00FF] to-[#00BCD4] opacity-50 blur-xl"
+      />
+      <motion.div
+        animate={{ rotate: -360 }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-4 rounded-full bg-gradient-to-br from-[#E91E63] via-[#9D00FF] to-[#00BCD4] flex items-center justify-center shadow-lg shadow-[#9D00FF]/30"
+      >
+        <span className="text-6xl font-bold text-white">R</span>
+      </motion.div>
+    </div>
+  );
+}
+
+// Scanning laser grid
+function LaserGrid() {
+  return (
+    <div className="relative w-48 h-48 overflow-hidden rounded-2xl bg-[#111] border border-white/10">
+      {/* Grid lines */}
+      <div className="absolute inset-0 grid grid-cols-4 grid-rows-4 gap-px">
+        {[...Array(16)].map((_, i) => (
+          <div key={i} className="bg-white/5" />
+        ))}
       </div>
       
-      <h3 className="text-2xl md:text-3xl font-bold text-white mt-10 md:mt-12 text-center">
-        Ultra-Rare Distribution
-      </h3>
-      <p className="text-white/60 mt-4 text-center max-w-md text-sm md:text-base">
-        1 million tokens. No presale. No team allocation. Pure, bot-proof distribution.
-      </p>
-    </div>
-  );
-}
-
-// Card 2: Scanning Laser Grid
-function LaserGridCard() {
-  return (
-    <div className="h-full flex flex-col items-center justify-center p-8 md:p-12 relative overflow-hidden">
-      {/* Blockchain nodes */}
-      <div className="absolute inset-0">
-        {[...Array(15)].map((_, i) => (
-          <motion.div
-            key={i}
-            animate={{
-              opacity: [0.2, 0.4, 0.2],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              delay: i * 0.1,
-            }}
-            className="absolute w-2 h-2 bg-white/30 rounded-full"
-            style={{
-              left: `${20 + (i % 5) * 15}%`,
-              top: `${20 + Math.floor(i / 5) * 20}%`,
-            }}
-          />
-        ))}
-        {/* Connection lines */}
-        <svg className="absolute inset-0 w-full h-full opacity-20">
-          {[...Array(10)].map((_, i) => (
-            <line
-              key={i}
-              x1={`${20 + (i % 5) * 15}%`}
-              y1={`${20 + Math.floor(i / 5) * 20}%`}
-              x2={`${35 + (i % 5) * 15}%`}
-              y2={`${40 + Math.floor(i / 5) * 20}%`}
-              stroke="#D4AF37"
-              strokeWidth="1"
-            />
-          ))}
-        </svg>
-      </div>
-
-      {/* Scanning laser */}
+      {/* Scanning line */}
       <motion.div
-        animate={{ y: [-100, 400] }}
+        animate={{ y: ["0%", "100%"] }}
         transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-        className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-60"
-        style={{ boxShadow: "0 0 20px 5px rgba(212,175,55,0.5)" }}
+        className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00BCD4] to-transparent"
       />
-
-      <div className="mt-auto relative z-10 text-center">
-        <h3 className="text-2xl md:text-3xl font-bold text-white">
-          Blockchain Verified
-        </h3>
-        <p className="text-white/60 mt-4 text-center max-w-md text-sm md:text-base">
-          Every claim verified on Base chain. Transparent, immutable, and auditable.
-        </p>
-      </div>
+      
+      {/* Glowing dots */}
+      {[...Array(8)].map((_, i) => (
+        <motion.div
+          key={i}
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+          className="absolute w-2 h-2 rounded-full bg-[#9D00FF]"
+          style={{
+            left: `${10 + (i % 4) * 25}%`,
+            top: `${10 + Math.floor(i / 4) * 50}%`,
+          }}
+        />
+      ))}
     </div>
   );
 }
 
-// Card 3: Pulsing Heartbeat
-function HeartbeatCard() {
+// Pulsing EKG waveform
+function EKGWave() {
   return (
-    <div className="h-full flex flex-col items-center justify-center p-8 md:p-12">
-      <svg className="w-full max-w-lg h-24 md:h-32" viewBox="0 0 400 100">
+    <div className="relative w-48 h-48 overflow-hidden rounded-2xl bg-[#111] border border-white/10">
+      <svg className="w-full h-full" viewBox="0 0 200 100" preserveAspectRatio="none">
         <motion.path
-          d="M0 50 L50 50 L60 50 L70 30 L80 70 L90 20 L100 80 L110 40 L120 60 L130 50 L200 50 L210 50 L220 30 L230 70 L240 20 L250 80 L260 40 L270 60 L280 50 L350 50 L360 50 L370 30 L380 70 L390 20 L400 80"
+          d="M0 50 L30 50 L40 50 L50 20 L60 80 L70 50 L100 50 L110 50 L120 20 L130 80 L140 50 L200 50"
+          stroke="url(#ekgGradient)"
+          strokeWidth="2"
           fill="none"
-          stroke="url(#heartbeatGradient)"
-          strokeWidth="3"
-          strokeLinecap="round"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         />
         <defs>
-          <linearGradient id="heartbeatGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.3" />
-            <stop offset="50%" stopColor="#D4AF37" stopOpacity="1" />
-            <stop offset="100%" stopColor="#D4AF37" stopOpacity="0.3" />
+          <linearGradient id="ekgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#E91E63" />
+            <stop offset="50%" stopColor="#9D00FF" />
+            <stop offset="100%" stopColor="#00BCD4" />
           </linearGradient>
         </defs>
-        
-        {/* Pulsing dot */}
-        <motion.circle
-          cx="200"
-          cy="50"
-          r="6"
-          fill="#D4AF37"
-          animate={{
-            scale: [1, 1.5, 1],
-            opacity: [1, 0.5, 1],
-          }}
-          transition={{ duration: 1, repeat: Infinity }}
-        />
       </svg>
-
-      <h3 className="text-2xl md:text-3xl font-bold text-white mt-10 md:mt-12 text-center">
-        Real Human Verification
-      </h3>
-      <p className="text-white/60 mt-4 text-center max-w-md text-sm md:text-base">
-        Turnstile CAPTCHA and stake-to-claim ensure only real humans participate.
-      </p>
+      
+      {/* Pulse dot */}
+      <motion.div
+        animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+        transition={{ duration: 1, repeat: Infinity }}
+        className="absolute top-1/2 left-1/4 w-3 h-3 rounded-full bg-[#E91E63] -translate-y-1/2"
+      />
     </div>
   );
 }
 
-const cards = [
-  { component: GoldCoinCard, title: "Distribution", height: "70vh" },
-  { component: LaserGridCard, title: "Verification", height: "75vh" },
-  { component: HeartbeatCard, title: "Humanity", height: "80vh" },
-];
-
 export default function Protocol() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
   return (
-    <section id="protocol" ref={containerRef} className="relative">
-      <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-        {cards.map((card, index) => {
-          const CardComponent = card.component;
-          
-          const scale = useTransform(
-            scrollYProgress,
-            [0, index * 0.33, (index + 1) * 0.33, 1],
-            [0.9, 1, 1, 0.9]
-          );
-          
-          const blur = useTransform(
-            scrollYProgress,
-            [0, index * 0.33, (index + 1) * 0.33, 1],
-            [20, 0, 0, 20]
-          );
-          
-          const opacity = useTransform(
-            scrollYProgress,
-            [0, index * 0.33, (index + 1) * 0.33, 1],
-            [0.5, 1, 1, 0.5]
-          );
-
-          const y = useTransform(
-            scrollYProgress,
-            [0, index * 0.33, (index + 1) * 0.33, 1],
-            [50, 0, 0, -50]
-          );
-
-          // Create blur filter string
-          const blurFilter = useBlur(blur);
-
-          return (
-            <motion.div
-              key={index}
-              style={{
-                scale,
-                opacity,
-                y,
-                filter: blurFilter,
-              }}
-              className={`absolute inset-0 flex items-center justify-center ${
-                index === cards.length - 1 ? "z-10" : `z-${10 - index}`
-              }`}
-            >
-              <div
-                className={`w-full max-w-4xl mx-6 rounded-[2rem] md:rounded-[3rem] border border-white/10 bg-[#0A0A0A]/90 backdrop-blur-xl overflow-hidden`}
-                style={{ height: card.height, maxHeight: "80vh" }}
-              >
-                <CardComponent />
-              </div>
-            </motion.div>
-          );
-        })}
+    <section id="protocol" className="relative bg-[#050505]">
+      <div className="py-12">
+        <div className="text-center mb-12 px-6">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
+          >
+            The <span className="bg-gradient-to-r from-[#E91E63] via-[#9D00FF] to-[#00BCD4] bg-clip-text text-transparent">Protocol</span>
+          </motion.h2>
+          <p className="text-white/60 max-w-2xl mx-auto">
+            Our three-phase distribution system ensures fair and secure token allocation
+          </p>
+        </div>
       </div>
-      
-      {/* Spacer for scroll */}
-      <div className="h-[300vh]" />
+
+      <ProtocolCard
+        title="Secure Distribution"
+        description="Stake-to-Claim ensures only committed participants receive tokens. Our dual-pool system prevents gaming and ensures fair allocation across all participants."
+        index={0}
+      >
+        <RotatingLogo />
+      </ProtocolCard>
+
+      <ProtocolCard
+        title="Verified Participation"
+        description="Cloudflare Turnstile verification combined with on-chain analysis prevents bot farming while maintaining a smooth user experience for real humans."
+        index={1}
+      >
+        <LaserGrid />
+      </ProtocolCard>
+
+      <ProtocolCard
+        title="Long-Term Value"
+        description="With only 1M tokens ever created, early participants benefit from scarcity. Staking, lottery, and trading utilities create ongoing demand and ecosystem growth."
+        index={2}
+      >
+        <EKGWave />
+      </ProtocolCard>
     </section>
   );
 }

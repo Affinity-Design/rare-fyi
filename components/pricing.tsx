@@ -1,166 +1,117 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
 const tiers = [
   {
-    name: "Standard",
+    name: "Starter",
     price: "Free",
-    description: "Start your journey with Rare",
+    description: "Start claiming Rare Coin today",
     features: [
-      "Basic claiming access",
-      "Community support",
-      "Standard rate limits",
-      "Base tier staking",
+      "Daily claims",
+      "Basic staking",
+      "Lottery entry",
+      "Community access",
     ],
-    cta: "Get Started",
+    cta: "Start Free",
     highlighted: false,
   },
   {
     name: "Premium",
     price: "1,000 RARE",
-    description: "Unlock full potential",
+    description: "Unlock premium features and rewards",
     features: [
-      "Priority claiming queue",
-      "Enhanced staking rewards",
-      "AI trading bot access",
-      "Lottery participation",
-      "Exclusive governance rights",
-      "Premium support",
+      "Priority claims",
+      "Enhanced staking APY",
+      "VIP lottery odds",
+      "Trading bot access",
+      "Early feature access",
     ],
-    cta: "Upgrade Now",
+    cta: "Stake Now",
     highlighted: true,
   },
   {
     name: "Whale",
     price: "10,000 RARE",
-    description: "Maximum benefits & influence",
+    description: "Maximum rewards and exclusivity",
     features: [
-      "All Premium benefits",
-      "Direct protocol influence",
-      "Custom rate limits",
-      "Early feature access",
-      "Exclusive events access",
-      "1-on-1 support",
-      "Founder community",
+      "Instant claims",
+      "Maximum staking APY",
+      "Guaranteed lottery entries",
+      "Full trading bot suite",
+      "Governance voting",
+      "Direct team access",
     ],
-    cta: "Contact Us",
+    cta: "Go Whale",
     highlighted: false,
   },
 ];
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-[#050505] overflow-hidden">
+    <section className="py-24 px-6 md:px-12 lg:px-24 bg-[#080808]">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
-            Membership Tiers
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+            Choose Your <span className="bg-gradient-to-r from-[#E91E63] via-[#9D00FF] to-[#00BCD4] bg-clip-text text-transparent">Level</span>
           </h2>
-          <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto">
-            Choose your level of engagement in the Rare ecosystem
+          <p className="text-white/60 text-lg max-w-2xl mx-auto">
+            Stake more RARE to unlock premium features and higher rewards
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {tiers.map((tier, index) => (
             <motion.div
               key={tier.name}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className={`relative rounded-[2rem] p-8 transition-all duration-300 ${
+              className={`relative rounded-3xl p-8 ${
                 tier.highlighted
-                  ? "bg-gradient-to-b from-[#D4AF37] to-[#B8952E] text-black md:-mt-4 md:mb-4 shadow-[0_8px_40px_rgba(212,175,55,0.4)]"
-                  : "bg-white/5 border border-white/10 backdrop-blur-xl"
+                  ? "bg-gradient-to-br from-[#9D00FF]/20 to-[#E91E63]/20 border-2 border-[#9D00FF]/50 scale-105"
+                  : "bg-[#0A0A0A] border border-white/10"
               }`}
             >
               {tier.highlighted && (
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-black text-[#D4AF37] border border-[#D4AF37]/30 px-3 py-1">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-[#E91E63] to-[#9D00FF] text-white text-sm font-medium">
                   Most Popular
-                </Badge>
+                </div>
               )}
 
-              <div className="mb-6">
-                <h3
-                  className={`text-xl font-semibold mb-2 ${
-                    tier.highlighted ? "text-black" : "text-white"
-                  }`}
-                >
-                  {tier.name}
-                </h3>
-                <div className="flex items-baseline gap-1">
-                  <span
-                    className={`text-4xl font-bold ${
-                      tier.highlighted ? "text-black" : "text-[#D4AF37]"
-                    }`}
-                  >
-                    {tier.price}
-                  </span>
-                  {tier.price !== "Free" && (
-                    <span
-                      className={tier.highlighted ? "text-black/70" : "text-white/50"}
-                    >
-                      stake
-                    </span>
-                  )}
-                </div>
-                <p
-                  className={`mt-2 text-sm ${
-                    tier.highlighted ? "text-black/80" : "text-white/60"
-                  }`}
-                >
-                  {tier.description}
-                </p>
+              <h3 className="text-xl font-bold text-white mb-2">{tier.name}</h3>
+              <div className="text-3xl font-bold bg-gradient-to-r from-[#E91E63] to-[#9D00FF] bg-clip-text text-transparent mb-2">
+                {tier.price}
               </div>
+              <p className="text-white/60 text-sm mb-6">{tier.description}</p>
 
               <ul className="space-y-3 mb-8">
                 {tier.features.map((feature) => (
-                  <li
-                    key={feature}
-                    className={`flex items-center gap-3 text-sm ${
-                      tier.highlighted ? "text-black/90" : "text-white/80"
-                    }`}
-                  >
-                    <svg
-                      className={`w-5 h-5 flex-shrink-0 ${
-                        tier.highlighted ? "text-black" : "text-[#D4AF37]"
-                      }`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
+                  <li key={feature} className="flex items-center gap-3 text-white/80 text-sm">
+                    <svg className="w-5 h-5 text-[#00BCD4]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     {feature}
                   </li>
                 ))}
               </ul>
 
-              <Button
-                variant={tier.highlighted ? "default" : "ghost"}
-                className={`w-full ${
+              <button
+                className={`w-full py-3 rounded-xl font-medium transition-all ${
                   tier.highlighted
-                    ? "bg-black hover:bg-black/90 text-[#D4AF37] border border-black"
-                    : ""
+                    ? "bg-gradient-to-r from-[#E91E63] to-[#9D00FF] text-white hover:opacity-90"
+                    : "bg-white/10 text-white hover:bg-white/20"
                 }`}
               >
                 {tier.cta}
-              </Button>
+              </button>
             </motion.div>
           ))}
         </div>

@@ -15,12 +15,12 @@ export default function Footer() {
     <footer className="bg-[#0A0A0A] rounded-t-[2rem] md:rounded-t-[3rem] pt-16 pb-8 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto">
         {/* Top section */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 pb-12 border-b border-white/10">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 pb-12 border-b border-purple-500/20">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#B8952E] flex items-center justify-center shadow-[0_4px_12px_rgba(212,175,55,0.3)]">
-                <span className="text-lg font-bold text-black">R</span>
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E91E63] via-[#9D00FF] to-[#00BCD4] flex items-center justify-center shadow-lg shadow-[#9D00FF]/30">
+                <span className="text-lg font-bold text-white">R</span>
               </div>
               <span className="text-xl font-semibold text-white">Rare</span>
             </Link>
@@ -29,7 +29,7 @@ export default function Footer() {
             </p>
 
             {/* System Status */}
-            <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10">
+            <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-purple-500/20">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
@@ -55,7 +55,7 @@ export default function Footer() {
                   <li key={link}>
                     <a
                       href="#"
-                      className="text-sm text-white/50 hover:text-[#D4AF37] transition-colors duration-200"
+                      className="text-sm text-white/50 hover:text-[#9D00FF] transition-colors duration-200"
                     >
                       {link}
                     </a>
@@ -80,7 +80,7 @@ export default function Footer() {
                 href="#"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] transition-colors duration-200"
+                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-[#9D00FF]/20 hover:text-[#9D00FF] transition-colors duration-200"
               >
                 <SocialIcon name={social} />
               </motion.a>
@@ -94,10 +94,10 @@ export default function Footer() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mt-12 pt-8 border-t border-white/5 text-center"
+          className="mt-12 pt-8 border-t border-purple-500/10 text-center"
         >
           <p
-            className="text-2xl md:text-3xl font-bold text-[#D4AF37]"
+            className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#E91E63] via-[#9D00FF] to-[#00BCD4] bg-clip-text text-transparent"
             style={{
               fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontStyle: "italic",
