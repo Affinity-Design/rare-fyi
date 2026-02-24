@@ -1,0 +1,235 @@
+---
+title: "The Bot Problem in Crypto Airdrops"
+description: "How bots are destroying fair distribution in crypto, and what we can do about it."
+date: "2026-02-24"
+author: "Felix"
+tags: ["bots", "airdrops", "fair-distribution", "security"]
+keywords: ["crypto bots", "airdrop farming", "sybil attack", "fair distribution", "anti-bot"]
+---
+
+# The Bot Problem in Crypto Airdrops
+
+If you've ever participated in a crypto airdrop, you've probably felt it.
+
+You did everything right. You followed the instructions. You waited patiently.
+
+And when the distribution happened... you got almost nothing.
+
+Meanwhile, someone else got 100x what you did.
+
+How? **Bots.**
+
+## The Scale of the Problem
+
+This isn't a small issue. It's systemic.
+
+### By the Numbers
+
+- **70-90%** of airdrop participants in some projects are suspected bots
+- Bot operators can create **thousands of wallet addresses** in minutes
+- A single bot farm can capture **millions of dollars** in airdrop value
+- Legitimate users often receive **less than 1%** of intended allocations
+
+### Real Examples
+
+We've seen this play out repeatedly:
+
+1. **Uniswap UNI airdrop** — Sybil attacks identified post-distribution
+2. **ENS airdrop** — Sophisticated farming strategies exploited the system
+3. **Optimism OP** — Multiple wallets receiving tokens meant for individuals
+
+Every major airdrop faces this problem. Most don't talk about it.
+
+## How Bots Work
+
+Understanding the enemy is the first step to defeating it.
+
+### 1. Scale
+
+Bots don't create one wallet. They create thousands.
+
+```
+Bot Farm Setup:
+- 1,000 unique wallets
+- Each claims daily
+- 1,000 claims per day
+- 30,000 claims per month
+```
+
+A single bot operator can capture more allocation than 10,000 real users.
+
+### 2. Automation
+
+Bots don't sleep. They don't forget. They don't get tired.
+
+```
+Bot Claim Cycle:
+- Monitor blockchain for claim window
+- Execute claim within milliseconds
+- Repeat across all wallets
+- 24/7/365
+```
+
+No human can compete with this.
+
+### 3. Timing
+
+Bots have perfect timing. They:
+
+- Monitor mempool for pending transactions
+- Execute claims at the optimal moment
+- Front-run other participants when possible
+
+### 4. Obfuscation
+
+Sophisticated bots hide their activity:
+
+- Distributed across multiple IP addresses
+- Randomized timing to appear human
+- Varied transaction amounts
+- Mixers to hide fund flows
+
+## Why Existing Solutions Fail
+
+### CAPTCHA Alone
+
+**Problem:** CAPTCHAs can be solved by:
+- CAPTCHA-solving services ($0.001-0.01 per solve)
+- Machine learning models
+- Human workers in low-cost countries
+
+**Result:** A small cost that doesn't stop determined bot operators.
+
+### KYC Requirements
+
+**Problem:** 
+- Creates friction for real users
+- Privacy concerns
+- Fake identities still work
+- Doesn't prevent multiple accounts per identity
+
+**Result:** Real users are frustrated; bots find workarounds.
+
+### Social Verification
+
+**Problem:**
+- Social accounts can be purchased
+- Bot farms have verified accounts
+- Doesn't scale to thousands of verifications
+
+**Result:** Easy to fake at scale.
+
+## A Better Approach: Economic Barriers
+
+The most effective bot deterrent is simple: **make it expensive.**
+
+### Stake-to-Claim
+
+**How it works:**
+1. To claim, you must first stake tokens
+2. Stake is locked during claim period
+3. Stake is returned after successful claim
+4. Multiple claims require multiple stakes
+
+**Why it works:**
+- Bot with 1,000 wallets needs 1,000 stakes
+- Economic cost scales linearly with attack scale
+- Real users stake once; bots must stake infinitely
+- Attack becomes unprofitable
+
+**Example:**
+```
+Claim reward: 10 RARE (worth $10)
+Stake requirement: 100 RARE (worth $100)
+
+Bot needs: 1,000 wallets × 100 RARE = 100,000 RARE ($100,000)
+Bot gets: 1,000 × 10 RARE = 10,000 RARE ($10,000)
+
+Attack loses $90,000 → Not profitable
+```
+
+### Rate Limiting
+
+**How it works:**
+- Limit claims per address per time period
+- Limit registrations per IP per day
+- Slow down the attack surface
+
+**Why it works:**
+- Bots rely on speed and volume
+- Rate limits reduce both
+- Gives legitimate users time to participate
+
+### Multi-Layer Defense
+
+No single solution is perfect. The answer is layers:
+
+```
+Layer 1: Cloudflare Turnstile (catch basic bots)
+    ↓
+Layer 2: Stake-to-Claim (economic barrier)
+    ↓
+Layer 3: Rate Limiting (temporal barrier)
+    ↓
+Layer 4: On-chain Analysis (pattern detection)
+    ↓
+Layer 5: Community Reporting (crowdsourced security)
+```
+
+Each layer catches what the previous missed.
+
+## What We're Building at Rare Coin
+
+We're implementing all of these defenses:
+
+### 1. Stake-to-Claim
+Every claim requires staked tokens. Bots would need to stake millions to game the system.
+
+### 2. Cloudflare Turnstile
+Modern CAPTCHA alternative that catches automated scripts.
+
+### 3. Dual Pool System
+Two alternating distribution pools make timing attacks harder.
+
+### 4. Rate Limiting
+24-hour cooldowns between registrations per address.
+
+### 5. Transparent Monitoring
+All bot detection is logged and visible. Community can verify fairness.
+
+## The Future of Fair Distribution
+
+Bot attacks aren't going away. As crypto grows, the incentives only increase.
+
+But we can fight back. With:
+
+- **Economic barriers** that make attacks unprofitable
+- **Technical barriers** that make attacks difficult
+- **Transparency** that makes attacks visible
+- **Community vigilance** that makes attacks risky
+
+Fair distribution is possible. It just requires intentional design.
+
+---
+
+## Join the Fair Distribution Movement
+
+If you're tired of bots ruining airdrops, join us.
+
+- **Twitter:** [@RarifyApps](https://x.com/RarifyApps)
+- **Telegram:** [t.me/rarify_community](https://t.me/rarify_community)
+- **Website:** [rare.fyi](https://rare.fyi)
+
+Let's build a crypto that works for humans.
+
+---
+
+*Next up: How our Stake-to-Claim system works in detail.*
+
+---
+
+**Tags:** #Bots #FairDistribution #Crypto #Airdrops #Security
+
+**Share this post:**
+- [Twitter](https://twitter.com/intent/tweet?text=The%20Bot%20Problem%20in%20Crypto%20Airdrops&url=https://rare.fyi/blog/bot-problem)
+- [Telegram](https://t.me/share/url?url=https://rare.fyi/blog/bot-problem&text=The%20Bot%20Problem%20in%20Crypto%20Airdrops)
