@@ -28,6 +28,17 @@ export default function Hero() {
     },
   };
 
+  // Generate particles with varied sizes for better visibility
+  const particles = Array.from({ length: 25 }, (_, i) => ({
+    id: i,
+    size: 2 + Math.random() * 4, // 2-6px for better visibility
+    left: 5 + Math.random() * 90,
+    top: 10 + Math.random() * 80,
+    duration: 4 + Math.random() * 4,
+    delay: Math.random() * 3,
+    opacity: 0.2 + Math.random() * 0.4,
+  }));
+
   return (
     <section className="relative min-h-[100dvh] flex items-center overflow-hidden">
       {/* Background */}
@@ -35,25 +46,31 @@ export default function Hero() {
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#050505] via-[#080808] to-[#0A0A0A] z-10" />
         
-        {/* Animated gold particles */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(15)].map((_, i) => (
+        {/* Animated gold particles - now larger and more visible */}
+        <div className="absolute inset-0 overflow-hidden z-[5]">
+          {particles.map((particle) => (
             <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-[#D4AF37]/30 rounded-full"
+              key={particle.id}
+              className="absolute rounded-full"
               style={{
-                left: `${10 + Math.random() * 80}%`,
-                top: `${20 + Math.random() * 60}%`,
+                width: particle.size,
+                height: particle.size,
+                left: `${particle.left}%`,
+                top: `${particle.top}%`,
+                background: `radial-gradient(circle, rgba(229, 197, 88, ${particle.opacity}) 0%, rgba(212, 175, 55, ${particle.opacity * 0.5}) 50%, transparent 100%)`,
+                boxShadow: `0 0 ${particle.size * 2}px rgba(212, 175, 55, ${particle.opacity * 0.6})`,
               }}
               animate={{
-                y: [0, -20, 0],
-                opacity: [0.3, 0.6, 0.3],
-                scale: [1, 1.3, 1],
+                y: [0, -30, 0],
+                x: [0, Math.sin(particle.id) * 10, 0],
+                opacity: [particle.opacity * 0.6, particle.opacity, particle.opacity * 0.6],
+                scale: [1, 1.2, 1],
               }}
               transition={{
-                duration: 5 + Math.random() * 3,
+                duration: particle.duration,
                 repeat: Infinity,
-                delay: Math.random() * 2,
+                delay: particle.delay,
+                ease: "easeInOut",
               }}
             />
           ))}
@@ -69,6 +86,18 @@ export default function Hero() {
           </defs>
           <rect width="100%" height="100%" fill="url(#meshGradient)" />
         </svg>
+        
+        {/* Subtle grid overlay for depth */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(212, 175, 55, 0.3) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(212, 175, 55, 0.3) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
+          }}
+        />
       </div>
 
       {/* Content - centered */}
@@ -84,20 +113,19 @@ export default function Hero() {
             variants={itemVariants}
             className="mb-8"
           >
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#B8952E] shadow-lg shadow-[#D4AF37]/20">
-              <span className="text-2xl font-bold text-black">R</span>
+            <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#B8952E] shadow-lg shadow-[#D4AF37]/30">
+              <span className="text-2xl md:text-3xl font-bold text-black">R</span>
             </div>
           </motion.div>
 
           {/* Headline with dramatic contrast */}
           <motion.h1
             variants={itemVariants}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-6 leading-[1.1]"
           >
-            <span className="text-white">Fair is the</span>
-            <br />
+            <span className="text-white block">Fair is the</span>
             <span
-              className="font-serif italic text-[#D4AF37]"
+              className="block mt-2 text-[#D4AF37] font-serif italic"
               style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
             >
               Future.
@@ -107,9 +135,11 @@ export default function Hero() {
           {/* Subheadline */}
           <motion.p
             variants={itemVariants}
-            className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed"
+            className="text-lg md:text-xl lg:text-2xl text-white/70 mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Bot-proof distribution. Real utility. <span className="text-[#D4AF37] font-medium">1M ultra-rare tokens</span> on Base Chain.
+            Bot-proof distribution. Real utility.{" "}
+            <span className="text-[#D4AF37] font-semibold">1M ultra-rare tokens</span>{" "}
+            on Base Chain.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -118,12 +148,12 @@ export default function Hero() {
             className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
           >
             <Link href="https://rare.claims" className="w-full sm:w-auto">
-              <Button variant="gold" size="xl" className="w-full sm:w-auto min-w-[180px]">
+              <Button variant="gold" size="xl" className="w-full sm:w-auto min-w-[200px] text-base">
                 Start Claiming
               </Button>
             </Link>
             <a href="#features" className="w-full sm:w-auto">
-              <Button variant="ghost" size="xl" className="w-full sm:w-auto min-w-[180px]">
+              <Button variant="ghost" size="xl" className="w-full sm:w-auto min-w-[200px] text-base">
                 Learn More
               </Button>
             </a>
@@ -132,18 +162,18 @@ export default function Hero() {
           {/* Stats */}
           <motion.div
             variants={itemVariants}
-            className="grid grid-cols-3 gap-4 md:gap-8 max-w-2xl mx-auto"
+            className="grid grid-cols-3 gap-3 md:gap-6 lg:gap-8 max-w-2xl mx-auto"
           >
-            <div className="p-4 md:p-6 rounded-2xl bg-white/5 border border-white/10">
-              <div className="text-2xl md:text-3xl font-bold text-[#D4AF37] mb-1">1M</div>
+            <div className="p-4 md:p-6 rounded-2xl bg-white/[0.05] border border-white/10 backdrop-blur-sm hover:bg-white/[0.08] transition-colors duration-300">
+              <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#D4AF37] mb-1">1M</div>
               <div className="text-xs md:text-sm text-white/60 uppercase tracking-wider">Total Supply</div>
             </div>
-            <div className="p-4 md:p-6 rounded-2xl bg-white/5 border border-white/10">
-              <div className="text-2xl md:text-3xl font-bold text-[#D4AF37] mb-1">Base</div>
+            <div className="p-4 md:p-6 rounded-2xl bg-white/[0.05] border border-white/10 backdrop-blur-sm hover:bg-white/[0.08] transition-colors duration-300">
+              <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#D4AF37] mb-1">Base</div>
               <div className="text-xs md:text-sm text-white/60 uppercase tracking-wider">Chain</div>
             </div>
-            <div className="p-4 md:p-6 rounded-2xl bg-white/5 border border-white/10">
-              <div className="text-2xl md:text-3xl font-bold text-[#D4AF37] mb-1">Bot-Proof</div>
+            <div className="p-4 md:p-6 rounded-2xl bg-white/[0.05] border border-white/10 backdrop-blur-sm hover:bg-white/[0.08] transition-colors duration-300">
+              <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#D4AF37] mb-1">Bot-Proof</div>
               <div className="text-xs md:text-sm text-white/60 uppercase tracking-wider">Security</div>
             </div>
           </motion.div>
@@ -154,15 +184,19 @@ export default function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
+        transition={{ delay: 2.5 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20"
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="w-6 h-10 rounded-full border-2 border-white/20 flex justify-center pt-2"
         >
-          <div className="w-1.5 h-1.5 bg-[#D4AF37] rounded-full" />
+          <motion.div 
+            animate={{ opacity: [0.5, 1, 0.5], y: [0, 2, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="w-1.5 h-1.5 bg-[#D4AF37] rounded-full" 
+          />
         </motion.div>
       </motion.div>
     </section>

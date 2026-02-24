@@ -112,7 +112,7 @@ body::before {
   bottom: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
@@ -256,4 +256,247 @@ body::after {
   .rounded-container {
     border-radius: 3rem;
   }
+}
+
+/* ========== CRITICAL FIXES FOR TAILWIND v4 ========== */
+
+/* Background color utilities */
+.bg-bg-primary {
+  background-color: #050505;
+}
+
+.bg-bg-secondary {
+  background-color: #0A0A0A;
+}
+
+.bg-bg-tertiary {
+  background-color: #111111;
+}
+
+/* Text color utilities */
+.text-gold-primary {
+  color: #D4AF37;
+}
+
+.text-gold-light {
+  color: #E5C558;
+}
+
+.text-gold-dark {
+  color: #B8952E;
+}
+
+/* Shadow utilities */
+.shadow-gold {
+  box-shadow: 0 4px 24px rgba(212, 175, 55, 0.4);
+}
+
+.shadow-gold-hover {
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.5);
+}
+
+.shadow-glow {
+  box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+}
+
+.shadow-glow-strong {
+  box-shadow: 0 0 60px rgba(212, 175, 55, 0.5);
+}
+
+/* Border color utilities */
+.border-gold-primary\/30 {
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+.border-gold-primary\/40 {
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.border-gold-primary\/50 {
+  border-color: rgba(212, 175, 55, 0.5);
+}
+
+/* From/To gradient utilities */
+.from-gold-primary {
+  --tw-gradient-from: #D4AF37 var(--tw-gradient-from-position);
+}
+
+.to-gold-dark {
+  --tw-gradient-to: #B8952E var(--tw-gradient-to-position);
+}
+
+.to-gold-light {
+  --tw-gradient-to: #E5C558 var(--tw-gradient-to-position);
+}
+
+/* Background opacity for gold */
+.bg-gold-primary\/20 {
+  background-color: rgba(212, 175, 55, 0.2);
+}
+
+.bg-gold-primary\/30 {
+  background-color: rgba(212, 175, 55, 0.3);
+}
+
+.bg-gold-primary\/40 {
+  background-color: rgba(212, 175, 55, 0.4);
+}
+
+/* ========== ENHANCED VISUAL POLISH ========== */
+
+/* Smooth 60fps animations with GPU acceleration */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Better text rendering */
+h1, h2, h3, h4, h5, h6 {
+  text-rendering: optimizeLegibility;
+}
+
+/* Ensure smooth color transitions */
+* {
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fix for iOS Safari 100vh bug */
+@supports (height: 100dvh) {
+  .min-h-screen {
+    min-height: 100dvh;
+  }
+}
+
+/* Better button hover states */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure images don't overflow */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Improve contrast for text on dark backgrounds */
+@media (max-width: 768px) {
+  .text-white\/60 {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  
+  .text-white\/50 {
+    color: rgba(255, 255, 255, 0.65);
+  }
+  
+  .text-white\/40 {
+    color: rgba(255, 255, 255, 0.55);
+  }
+}
+
+/* Pricing card scale fix - prevent overflow */
+.pricing-card-highlighted {
+  transform: scale(1.02);
+  z-index: 10;
+}
+
+@media (min-width: 768px) {
+  .pricing-card-highlighted {
+    transform: scale(1.05);
+  }
+}
+
+/* Protocol section card heights */
+.protocol-card-1 {
+  min-height: 70vh;
+}
+
+.protocol-card-2 {
+  min-height: 75vh;
+}
+
+.protocol-card-3 {
+  min-height: 80vh;
+}
+
+/* Mobile hamburger menu animation */
+.hamburger-line {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hamburger-open .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-open .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-open .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Gold shimmer effect for premium elements */
+@keyframes goldShimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.gold-shimmer {
+  background: linear-gradient(
+    90deg,
+    #B8952E 0%,
+    #E5C558 25%,
+    #D4AF37 50%,
+    #E5C558 75%,
+    #B8952E 100%
+  );
+  background-size: 200% auto;
+  animation: goldShimmer 3s linear infinite;
+}
+
+/* Floating animation for decorative elements */
+@keyframes floatUp {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+}
+
+.animate-float-up {
+  animation: floatUp 6s ease-in-out infinite;
+}
+
+/* Pulse glow for live indicators */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(212, 175, 55, 0);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Ensure proper z-index stacking */
+.z-overlay {
+  z-index: 50;
+}
+
+.z-modal {
+  z-index: 100;
+}
+
+.z-tooltip {
+  z-index: 150;
 }

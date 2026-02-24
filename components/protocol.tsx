@@ -1,12 +1,17 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
+
+// Helper to create blur filter string from motion value
+function useBlur(blur: MotionValue<number>) {
+  return useTransform(blur, (v) => `blur(${v}px)`);
+}
 
 // Card 1: Rotating Gold Coin
 function GoldCoinCard() {
   return (
-    <div className="h-full flex flex-col items-center justify-center p-12">
+    <div className="h-full flex flex-col items-center justify-center p-8 md:p-12">
       <div className="relative">
         {/* Glow effect */}
         <motion.div
@@ -17,7 +22,7 @@ function GoldCoinCard() {
               "0 0 60px rgba(212,175,55,0.3)",
             ],
           }}
-          transition={{ duration: 3, repeat: Infinity }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           className="absolute inset-0 rounded-full"
         />
         
@@ -28,18 +33,18 @@ function GoldCoinCard() {
           className="relative w-32 h-32 md:w-48 md:h-48"
           style={{ transformStyle: "preserve-3d" }}
         >
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gold-light via-gold-primary to-gold-dark flex items-center justify-center shadow-2xl">
-            <span className="text-6xl md:text-8xl font-bold text-black/80">R</span>
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#E5C558] via-[#D4AF37] to-[#B8952E] flex items-center justify-center shadow-2xl">
+            <span className="text-5xl md:text-7xl font-bold text-black/80">R</span>
           </div>
           {/* Edge effect */}
-          <div className="absolute inset-0 rounded-full border-4 border-gold-light/50" />
+          <div className="absolute inset-0 rounded-full border-4 border-[#E5C558]/50" />
         </motion.div>
       </div>
       
-      <h3 className="text-2xl md:text-3xl font-bold text-white mt-12 text-center">
+      <h3 className="text-2xl md:text-3xl font-bold text-white mt-10 md:mt-12 text-center">
         Ultra-Rare Distribution
       </h3>
-      <p className="text-white/60 mt-4 text-center max-w-md">
+      <p className="text-white/60 mt-4 text-center max-w-md text-sm md:text-base">
         1 million tokens. No presale. No team allocation. Pure, bot-proof distribution.
       </p>
     </div>
@@ -49,13 +54,21 @@ function GoldCoinCard() {
 // Card 2: Scanning Laser Grid
 function LaserGridCard() {
   return (
-    <div className="h-full flex flex-col items-center justify-center p-12 relative overflow-hidden">
+    <div className="h-full flex flex-col items-center justify-center p-8 md:p-12 relative overflow-hidden">
       {/* Blockchain nodes */}
       <div className="absolute inset-0">
         {[...Array(15)].map((_, i) => (
-          <div
+          <motion.div
             key={i}
-            className="absolute w-2 h-2 bg-white/20 rounded-full"
+            animate={{
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              delay: i * 0.1,
+            }}
+            className="absolute w-2 h-2 bg-white/30 rounded-full"
             style={{
               left: `${20 + (i % 5) * 15}%`,
               top: `${20 + Math.floor(i / 5) * 20}%`,
@@ -82,16 +95,18 @@ function LaserGridCard() {
       <motion.div
         animate={{ y: [-100, 400] }}
         transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-        className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold-primary to-transparent opacity-60"
+        className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-60"
         style={{ boxShadow: "0 0 20px 5px rgba(212,175,55,0.5)" }}
       />
 
-      <h3 className="text-2xl md:text-3xl font-bold text-white mt-auto relative z-10 text-center">
-        Blockchain Verified
-      </h3>
-      <p className="text-white/60 mt-4 text-center max-w-md relative z-10">
-        Every claim verified on Base chain. Transparent, immutable, and auditable.
-      </p>
+      <div className="mt-auto relative z-10 text-center">
+        <h3 className="text-2xl md:text-3xl font-bold text-white">
+          Blockchain Verified
+        </h3>
+        <p className="text-white/60 mt-4 text-center max-w-md text-sm md:text-base">
+          Every claim verified on Base chain. Transparent, immutable, and auditable.
+        </p>
+      </div>
     </div>
   );
 }
@@ -99,8 +114,8 @@ function LaserGridCard() {
 // Card 3: Pulsing Heartbeat
 function HeartbeatCard() {
   return (
-    <div className="h-full flex flex-col items-center justify-center p-12">
-      <svg className="w-full max-w-lg h-32" viewBox="0 0 400 100">
+    <div className="h-full flex flex-col items-center justify-center p-8 md:p-12">
+      <svg className="w-full max-w-lg h-24 md:h-32" viewBox="0 0 400 100">
         <motion.path
           d="M0 50 L50 50 L60 50 L70 30 L80 70 L90 20 L100 80 L110 40 L120 60 L130 50 L200 50 L210 50 L220 30 L230 70 L240 20 L250 80 L260 40 L270 60 L280 50 L350 50 L360 50 L370 30 L380 70 L390 20 L400 80"
           fill="none"
@@ -133,10 +148,10 @@ function HeartbeatCard() {
         />
       </svg>
 
-      <h3 className="text-2xl md:text-3xl font-bold text-white mt-12 text-center">
+      <h3 className="text-2xl md:text-3xl font-bold text-white mt-10 md:mt-12 text-center">
         Real Human Verification
       </h3>
-      <p className="text-white/60 mt-4 text-center max-w-md">
+      <p className="text-white/60 mt-4 text-center max-w-md text-sm md:text-base">
         Turnstile CAPTCHA and stake-to-claim ensure only real humans participate.
       </p>
     </div>
@@ -144,9 +159,9 @@ function HeartbeatCard() {
 }
 
 const cards = [
-  { component: GoldCoinCard, title: "Distribution" },
-  { component: LaserGridCard, title: "Verification" },
-  { component: HeartbeatCard, title: "Humanity" },
+  { component: GoldCoinCard, title: "Distribution", height: "70vh" },
+  { component: LaserGridCard, title: "Verification", height: "75vh" },
+  { component: HeartbeatCard, title: "Humanity", height: "80vh" },
 ];
 
 export default function Protocol() {
@@ -161,11 +176,6 @@ export default function Protocol() {
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
         {cards.map((card, index) => {
           const CardComponent = card.component;
-          const progress = useTransform(
-            scrollYProgress,
-            [index * 0.33, (index + 1) * 0.33],
-            [0, 1]
-          );
           
           const scale = useTransform(
             scrollYProgress,
@@ -185,22 +195,31 @@ export default function Protocol() {
             [0.5, 1, 1, 0.5]
           );
 
+          const y = useTransform(
+            scrollYProgress,
+            [0, index * 0.33, (index + 1) * 0.33, 1],
+            [50, 0, 0, -50]
+          );
+
+          // Create blur filter string
+          const blurFilter = useBlur(blur);
+
           return (
             <motion.div
               key={index}
               style={{
                 scale,
-                filter: `blur(${blur.get()}px)`,
                 opacity,
+                y,
+                filter: blurFilter,
               }}
               className={`absolute inset-0 flex items-center justify-center ${
-                index === cards.length - 1 ? "z-10" : ""
+                index === cards.length - 1 ? "z-10" : `z-${10 - index}`
               }`}
             >
               <div
-                className={`w-full max-w-4xl mx-6 rounded-[3rem] border border-white/10 bg-bg-secondary/90 backdrop-blur-xl ${
-                  index === 0 ? "h-[70vh]" : index === 1 ? "h-[75vh]" : "h-[80vh]"
-                }`}
+                className={`w-full max-w-4xl mx-6 rounded-[2rem] md:rounded-[3rem] border border-white/10 bg-[#0A0A0A]/90 backdrop-blur-xl overflow-hidden`}
+                style={{ height: card.height, maxHeight: "80vh" }}
               >
                 <CardComponent />
               </div>

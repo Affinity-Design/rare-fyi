@@ -8,7 +8,7 @@ import Footer from "@/components/footer";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen relative overflow-hidden">
+    <main className="min-h-screen relative overflow-x-hidden bg-[#050505]">
       {/* Global noise overlay is handled in globals.css */}
       
       {/* Floating Navigation */}

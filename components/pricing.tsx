@@ -53,39 +53,39 @@ const tiers = [
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-bg-primary">
+    <section id="pricing" className="py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-[#050505] overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
             Membership Tiers
           </h2>
-          <p className="text-white/60 text-lg max-w-2xl mx-auto">
+          <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto">
             Choose your level of engagement in the Rare ecosystem
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-center">
           {tiers.map((tier, index) => (
             <motion.div
               key={tier.name}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className={`relative rounded-[2rem] p-8 transition-all duration-300 ${
                 tier.highlighted
-                  ? "bg-gradient-to-b from-gold-primary to-gold-dark text-black scale-105 z-10 shadow-gold"
+                  ? "bg-gradient-to-b from-[#D4AF37] to-[#B8952E] text-black md:-mt-4 md:mb-4 shadow-[0_8px_40px_rgba(212,175,55,0.4)]"
                   : "bg-white/5 border border-white/10 backdrop-blur-xl"
               }`}
             >
               {tier.highlighted && (
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-black text-gold-primary border border-gold-primary/30">
+                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-black text-[#D4AF37] border border-[#D4AF37]/30 px-3 py-1">
                   Most Popular
                 </Badge>
               )}
@@ -101,14 +101,14 @@ export default function Pricing() {
                 <div className="flex items-baseline gap-1">
                   <span
                     className={`text-4xl font-bold ${
-                      tier.highlighted ? "text-black" : "text-gold-primary"
+                      tier.highlighted ? "text-black" : "text-[#D4AF37]"
                     }`}
                   >
                     {tier.price}
                   </span>
                   {tier.price !== "Free" && (
                     <span
-                      className={tier.highlighted ? "text-black/60" : "text-white/40"}
+                      className={tier.highlighted ? "text-black/70" : "text-white/50"}
                     >
                       stake
                     </span>
@@ -116,7 +116,7 @@ export default function Pricing() {
                 </div>
                 <p
                   className={`mt-2 text-sm ${
-                    tier.highlighted ? "text-black/70" : "text-white/50"
+                    tier.highlighted ? "text-black/80" : "text-white/60"
                   }`}
                 >
                   {tier.description}
@@ -128,12 +128,12 @@ export default function Pricing() {
                   <li
                     key={feature}
                     className={`flex items-center gap-3 text-sm ${
-                      tier.highlighted ? "text-black/80" : "text-white/70"
+                      tier.highlighted ? "text-black/90" : "text-white/80"
                     }`}
                   >
                     <svg
                       className={`w-5 h-5 flex-shrink-0 ${
-                        tier.highlighted ? "text-black" : "text-gold-primary"
+                        tier.highlighted ? "text-black" : "text-[#D4AF37]"
                       }`}
                       fill="none"
                       viewBox="0 0 24 24"
@@ -155,7 +155,7 @@ export default function Pricing() {
                 variant={tier.highlighted ? "default" : "ghost"}
                 className={`w-full ${
                   tier.highlighted
-                    ? "bg-black hover:bg-black/80 text-gold-primary"
+                    ? "bg-black hover:bg-black/90 text-[#D4AF37] border border-black"
                     : ""
                 }`}
               >

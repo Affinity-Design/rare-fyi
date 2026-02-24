@@ -12,51 +12,57 @@ const footerLinks = {
 
 export default function Footer() {
   return (
-    <footer className="bg-bg-secondary rounded-t-[3rem] pt-16 pb-8 px-6 md:px-12 lg:px-24">
+    <footer className="bg-[#0A0A0A] rounded-t-[2rem] md:rounded-t-[3rem] pt-16 pb-8 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto">
         {/* Top section */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 pb-12 border-b border-white/10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold-primary to-gold-dark flex items-center justify-center shadow-gold">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#B8952E] flex items-center justify-center shadow-[0_4px_12px_rgba(212,175,55,0.3)]">
                 <span className="text-lg font-bold text-black">R</span>
               </div>
               <span className="text-xl font-semibold text-white">Rare</span>
             </Link>
-            <p className="text-white/50 text-sm mb-6">
+            <p className="text-white/60 text-sm mb-6 leading-relaxed">
               Bot-proof distribution. Real utility. The future of fair crypto.
             </p>
 
             {/* System Status */}
             <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10">
-              <span className="relative flex h-2 w-2">
+              <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
               </span>
               <span className="text-sm text-white/70">System Operational</span>
             </div>
           </div>
 
           {/* Links */}
-          {Object.entries(footerLinks).map(([category, links]) => (
-            <div key={category}>
+          {Object.entries(footerLinks).map(([category, links], categoryIndex) => (
+            <motion.div
+              key={category}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: categoryIndex * 0.1 }}
+            >
               <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
                 {category}
               </h4>
-              <ul className="space-y-2">
+              <ul className="space-y-2.5">
                 {links.map((link) => (
                   <li key={link}>
                     <a
                       href="#"
-                      className="text-sm text-white/50 hover:text-gold-primary transition-colors"
+                      className="text-sm text-white/50 hover:text-[#D4AF37] transition-colors duration-200"
                     >
                       {link}
                     </a>
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           ))}
         </div>
 
@@ -66,16 +72,18 @@ export default function Footer() {
             © {new Date().getFullYear()} Rare Coin. All rights reserved.
           </p>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {/* Social icons */}
             {["twitter", "discord", "telegram", "github"].map((social) => (
-              <a
+              <motion.a
                 key={social}
                 href="#"
-                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold-primary/20 hover:text-gold-primary transition-all"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] transition-colors duration-200"
               >
                 <SocialIcon name={social} />
-              </a>
+              </motion.a>
             ))}
           </div>
         </div>
@@ -85,10 +93,11 @@ export default function Footer() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
           className="mt-12 pt-8 border-t border-white/5 text-center"
         >
           <p
-            className="text-2xl md:text-3xl font-bold text-gold-primary"
+            className="text-2xl md:text-3xl font-bold text-[#D4AF37]"
             style={{
               fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontStyle: "italic",

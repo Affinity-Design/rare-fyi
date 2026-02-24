@@ -26,29 +26,32 @@ function SecurityShuffler() {
   }, []);
 
   return (
-    <div className="relative h-72 p-6 overflow-hidden rounded-3xl bg-[#0A0A0A] border border-white/10">
+    <div className="relative h-80 p-6 overflow-hidden rounded-3xl bg-[#0A0A0A] border border-white/10 backdrop-blur-sm">
       <h3 className="text-lg font-semibold text-[#D4AF37] mb-4">
         Bot-Proof Intelligence
       </h3>
-      <div className="relative h-48">
+      <div className="relative h-52">
         <AnimatePresence mode="popLayout">
           {cards.map((card, index) => (
             <motion.div
               key={card.title}
-              initial={{ y: 60, opacity: 0, scale: 0.95 }}
+              initial={{ y: 70, opacity: 0, scale: 0.95 }}
               animate={{
-                y: index * 28,
-                opacity: 1 - index * 0.25,
+                y: index * 32,
+                opacity: 1 - index * 0.3,
                 scale: 1 - index * 0.05,
                 zIndex: 3 - index,
               }}
-              exit={{ y: -60, opacity: 0, scale: 0.95 }}
+              exit={{ y: -70, opacity: 0, scale: 0.95 }}
               transition={{
                 type: "spring",
-                stiffness: 300,
+                stiffness: 350,
                 damping: 30,
               }}
-              className="absolute left-0 right-0 bg-white/5 border border-white/10 rounded-xl p-4"
+              className="absolute left-0 right-0 bg-white/[0.05] border border-white/10 rounded-xl p-4 backdrop-blur-sm"
+              style={{
+                filter: index > 0 ? `blur(${index * 0.5}px)` : 'none',
+              }}
             >
               <div className="text-white font-medium text-sm">{card.title}</div>
               <div className="text-white/50 text-xs mt-1">{card.desc}</div>
@@ -98,24 +101,24 @@ function TelemetryTypewriter() {
   }, [currentMessage]);
 
   return (
-    <div className="relative h-72 p-6 rounded-3xl bg-[#0A0A0A] border border-white/10">
+    <div className="relative h-80 p-6 rounded-3xl bg-[#0A0A0A] border border-white/10 backdrop-blur-sm">
       <div className="flex items-center gap-2 mb-4">
         <h3 className="text-lg font-semibold text-[#D4AF37]">
           Distribution Stream
         </h3>
-        <span className="relative flex h-2 w-2">
+        <span className="relative flex h-2.5 w-2.5">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
         </span>
-        <span className="text-xs text-white/40 ml-1">LIVE</span>
+        <span className="text-xs text-white/50 ml-1 font-medium uppercase tracking-wider">LIVE</span>
       </div>
-      <div className="h-48 flex items-center">
+      <div className="h-52 flex items-center">
         <div className="font-mono text-sm text-white/80 leading-relaxed">
           <span className="text-[#D4AF37] mr-2">&gt;</span>
           <span>{displayedText}</span>
           <motion.span
             animate={{ opacity: [1, 0] }}
-            transition={{ duration: 0.8, repeat: Infinity }}
+            transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
             className="inline-block w-2 h-4 bg-[#D4AF37] ml-0.5 align-middle"
           />
         </div>
@@ -166,37 +169,45 @@ function ProtocolScheduler() {
   }, []);
 
   return (
-    <div className="relative h-72 p-6 rounded-3xl bg-[#0A0A0A] border border-white/10 overflow-hidden">
+    <div className="relative h-80 p-6 rounded-3xl bg-[#0A0A0A] border border-white/10 backdrop-blur-sm overflow-hidden">
       <h3 className="text-lg font-semibold text-[#D4AF37] mb-4">
         Adaptive Protocol
       </h3>
-      <div className="relative">
+      <div className="relative h-52">
         {/* Week grid */}
         <div className="flex gap-2 mb-6">
           {days.map((day, i) => (
-            <div
+            <motion.div
               key={i}
-              className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+              animate={{
+                scale: activeDay === i ? 1.1 : 1,
+              }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-medium transition-colors duration-200 ${
                 activeDay === i
                   ? "bg-[#D4AF37] text-black"
                   : "bg-white/5 text-white/50"
               }`}
             >
               {day}
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* Claim button */}
-        <button className="px-4 py-2 rounded-lg bg-[#D4AF37]/20 text-[#D4AF37] text-sm font-medium border border-[#D4AF37]/30 hover:bg-[#D4AF37]/30 transition-colors">
+        <motion.button 
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="px-4 py-2 rounded-lg bg-[#D4AF37]/20 text-[#D4AF37] text-sm font-medium border border-[#D4AF37]/30 hover:bg-[#D4AF37]/30 transition-colors"
+        >
           Claim
-        </button>
+        </motion.button>
 
         {/* Animated cursor */}
         <motion.svg
           animate={{ x: cursorPos.x, y: cursorPos.y }}
-          transition={{ type: "spring", stiffness: 200, damping: 25 }}
-          className="absolute left-0 top-8 w-6 h-6 pointer-events-none"
+          transition={{ type: "spring", stiffness: 250, damping: 25 }}
+          className="absolute left-0 top-8 w-6 h-6 pointer-events-none drop-shadow-lg"
           viewBox="0 0 24 24"
           fill="none"
         >
@@ -219,7 +230,7 @@ export default function Features() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
@@ -232,9 +243,30 @@ export default function Features() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <SecurityShuffler />
-          <TelemetryTypewriter />
-          <ProtocolScheduler />
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: 0 }}
+          >
+            <SecurityShuffler />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <TelemetryTypewriter />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <ProtocolScheduler />
+          </motion.div>
         </div>
       </div>
     </section>
