@@ -1,0 +1,243 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Card } from "@/components/ui/card";
+
+// Card 1: Security Shuffler
+function SecurityShuffler() {
+  const securityLabels = [
+    { title: "Stake-to-Claim", desc: "Lock tokens to participate" },
+    { title: "Turnstile Verified", desc: "Cloudflare anti-bot" },
+    { title: "Rate Limited", desc: "Fair claim windows" },
+  ];
+
+  const [cards, setCards] = useState(securityLabels);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCards((prev) => {
+        const newCards = [...prev];
+        const last = newCards.pop()!;
+        newCards.unshift(last);
+        return newCards;
+      });
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <Card className="relative h-64 p-6 overflow-hidden bg-bg-secondary/80">
+      <h3 className="text-lg font-medium text-gold-primary mb-4">
+        Bot-Proof Intelligence
+      </h3>
+      <div className="relative h-40">
+        <AnimatePresence mode="popLayout">
+          {cards.map((card, index) => (
+            <motion.div
+              key={card.title}
+              initial={{ y: 60, opacity: 0, scale: 0.95 }}
+              animate={{
+                y: index * 24,
+                opacity: 1 - index * 0.25,
+                scale: 1 - index * 0.05,
+                zIndex: 3 - index,
+              }}
+              exit={{ y: -60, opacity: 0, scale: 0.95 }}
+              transition={{
+                type: "spring",
+                stiffness: 300,
+                damping: 30,
+              }}
+              className="absolute left-0 right-0 bg-white/5 border border-white/10 rounded-xl p-4"
+            >
+              <div className="text-white font-medium">{card.title}</div>
+              <div className="text-white/50 text-sm">{card.desc}</div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+    </Card>
+  );
+}
+
+// Card 2: Telemetry Typewriter
+function TelemetryTypewriter() {
+  const messages = [
+    "Distributing to verified humans...",
+    "Scanning for bot activity...",
+    "Claims processed: 847,293",
+    "Stake pool active: 12.4M RARE",
+    "Next distribution in 00:04:32",
+    "Anti-sybil checks passed ✓",
+  ];
+
+  const [currentMessage, setCurrentMessage] = useState(0);
+  const [displayedText, setDisplayedText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+
+  useEffect(() => {
+    const message = messages[currentMessage];
+    let charIndex = 0;
+    setDisplayedText("");
+    setIsTyping(true);
+
+    const typeInterval = setInterval(() => {
+      if (charIndex < message.length) {
+        setDisplayedText(message.slice(0, charIndex + 1));
+        charIndex++;
+      } else {
+        setIsTyping(false);
+        clearInterval(typeInterval);
+        setTimeout(() => {
+          setCurrentMessage((prev) => (prev + 1) % messages.length);
+        }, 2000);
+      }
+    }, 50);
+
+    return () => clearInterval(typeInterval);
+  }, [currentMessage]);
+
+  return (
+    <Card className="relative h-64 p-6 bg-bg-secondary/80">
+      <div className="flex items-center gap-2 mb-4">
+        <h3 className="text-lg font-medium text-gold-primary">
+          Distribution Stream
+        </h3>
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+        </span>
+      </div>
+      <div className="h-40 flex items-center">
+        <div className="font-mono text-sm text-white/80">
+          <span className="text-gold-primary">&gt;</span> {displayedText}
+          <motion.span
+            animate={{ opacity: [1, 0] }}
+            transition={{ duration: 0.8, repeat: Infinity }}
+            className="inline-block w-2 h-5 bg-gold-primary ml-0.5 align-middle"
+          />
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+// Card 3: Protocol Scheduler
+function ProtocolScheduler() {
+  const days = ["S", "M", "T", "W", "T", "F", "S"];
+  const [activeDay, setActiveDay] = useState<number | null>(null);
+  const [cursorPos, setCursorPos] = useState({ x: -30, y: 20 });
+  const [phase, setPhase] = useState(0);
+
+  useEffect(() => {
+    const phases = [
+      { day: 3, duration: 1500 },  // Move to Wednesday
+      { day: 3, click: true, duration: 500 },  // Click
+      { day: 3, duration: 1000 },  // Pause
+      { target: "claim", duration: 1500 },  // Move to claim button
+      { reset: true, duration: 2000 },  // Reset
+    ];
+
+    let phaseIndex = 0;
+    const runPhase = () => {
+      const p = phases[phaseIndex];
+      
+      if (p.reset) {
+        setActiveDay(null);
+        setCursorPos({ x: -30, y: 20 });
+        setPhase(0);
+      } else if (p.target === "claim") {
+        setCursorPos({ x: 140, y: 70 });
+      } else if (p.click) {
+        setActiveDay(p.day!);
+      } else if (p.day !== undefined) {
+        const targetX = (p.day * 36) + 8;
+        setCursorPos({ x: targetX, y: 20 });
+      }
+
+      setTimeout(() => {
+        phaseIndex = (phaseIndex + 1) % phases.length;
+        runPhase();
+      }, p.duration);
+    };
+
+    const timeout = setTimeout(runPhase, 1000);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return (
+    <Card className="relative h-64 p-6 bg-bg-secondary/80 overflow-hidden">
+      <h3 className="text-lg font-medium text-gold-primary mb-4">
+        Adaptive Protocol
+      </h3>
+      <div className="relative">
+        {/* Week grid */}
+        <div className="flex gap-2 mb-6">
+          {days.map((day, i) => (
+            <div
+              key={i}
+              className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-all duration-300 ${
+                activeDay === i
+                  ? "bg-gold-primary text-black"
+                  : "bg-white/5 text-white/50"
+              }`}
+            >
+              {day}
+            </div>
+          ))}
+        </div>
+
+        {/* Claim button */}
+        <button className="px-4 py-2 rounded-lg bg-gold-primary/20 text-gold-primary text-sm border border-gold-primary/30">
+          Claim
+        </button>
+
+        {/* Animated cursor */}
+        <motion.svg
+          animate={{ x: cursorPos.x, y: cursorPos.y }}
+          transition={{ type: "spring", stiffness: 200, damping: 25 }}
+          className="absolute left-0 top-8 w-6 h-6 pointer-events-none"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M5 2L5 18L9 14L12 22L16 20L13 12L19 12L5 2Z"
+            fill="white"
+            stroke="black"
+            strokeWidth="1.5"
+          />
+        </motion.svg>
+      </div>
+    </Card>
+  );
+}
+
+export default function Features() {
+  return (
+    <section id="features" className="py-24 px-6 md:px-12 lg:px-24 bg-bg-secondary">
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Bot-Proof Micro-UI
+          </h2>
+          <p className="text-white/60 text-lg max-w-2xl mx-auto">
+            Interactive functional artifacts showcasing our security-first distribution system
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <SecurityShuffler />
+          <TelemetryTypewriter />
+          <ProtocolScheduler />
+        </div>
+      </div>
+    </section>
+  );
+}
