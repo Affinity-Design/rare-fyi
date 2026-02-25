@@ -1,190 +1,311 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import {
+  motion,
+  useInView,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
-export default function Hero() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.3,
-      },
-    },
-  };
+const tickerItems = [
+  { dot: true, label: "$RARE", value: "Now Live on Base Chain 🔵" },
+  { label: "Transaction Speed", value: "< 2 seconds", green: true },
+  { label: "Tx Cost", value: "< $0.001 on Base", green: true },
+  { label: "Total Supply", value: "3,650,000 RARE" },
+  { label: "Daily Release", value: "200 RARE / Day" },
+  { label: "Final Distribution", value: "Year 2071" },
+  { dot: true, label: "Base Chain Status", value: "Operational", green: true },
+];
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.4, 0, 0.2, 1] as const,
-      },
-    },
-  };
+const heroStats = [
+  { value: "3,650,000", label: "Total Supply Ever" },
+  { value: "200/day", label: "Daily Distribution" },
+  { value: "2071", label: "Final Coin Year" },
+];
+
+const heroLinks = [
+  "New To Crypto?",
+  "What Is Rare Coin?",
+  "How To Make Your First Claim",
+  "How To Get Verified",
+  "How To Add ETH on Base",
+  "How To Buy $RARE",
+];
+
+function TickerStrip() {
+  const items = [...tickerItems, ...tickerItems]; // duplicate for loop
 
   return (
-    <section className="relative min-h-[100dvh] flex items-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0">
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#050505] via-[#080808] to-[#0A0A0A] z-10" />
-        
-        {/* Animated particles - PINK/PURPLE/CYAN */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute rounded-full"
-              style={{
-                width: Math.random() > 0.5 ? '4px' : '2px',
-                height: Math.random() > 0.5 ? '4px' : '2px',
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                background: i % 3 === 0 
-                  ? '#E91E63' 
-                  : i % 3 === 1 
-                    ? '#9D00FF' 
-                    : '#00BCD4',
-              }}
-              animate={{
-                y: [0, -30, 0],
-                opacity: [0.2, 0.6, 0.2],
-                scale: [1, 1.5, 1],
-              }}
-              transition={{
-                duration: 4 + Math.random() * 3,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Gradient mesh */}
-        <svg className="absolute inset-0 w-full h-full opacity-30" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="purpleGlow" cx="30%" cy="70%">
-              <stop offset="0%" stopColor="#9D00FF" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#050505" stopOpacity="0" />
-            </radialGradient>
-            <radialGradient id="pinkGlow" cx="70%" cy="30%">
-              <stop offset="0%" stopColor="#E91E63" stopOpacity="0.2" />
-              <stop offset="100%" stopColor="#050505" stopOpacity="0" />
-            </radialGradient>
-            <radialGradient id="cyanGlow" cx="50%" cy="50%">
-              <stop offset="0%" stopColor="#00BCD4" stopOpacity="0.15" />
-              <stop offset="100%" stopColor="#050505" stopOpacity="0" />
-            </radialGradient>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#purpleGlow)" />
-          <rect width="100%" height="100%" fill="url(#pinkGlow)" />
-          <rect width="100%" height="100%" fill="url(#cyanGlow)" />
-        </svg>
-      </div>
-
-      {/* Content */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="relative z-20 w-full px-6 md:px-12 lg:px-24 py-24"
-      >
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Circle Logo - PINK → PURPLE → CYAN gradient */}
-          <motion.div
-            variants={itemVariants}
-            className="mb-8"
-          >
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-[#E91E63] via-[#9D00FF] to-[#00BCD4] shadow-lg shadow-[#9D00FF]/30">
-              <span className="text-4xl font-bold text-white">R</span>
-            </div>
-          </motion.div>
-
-          {/* Headline */}
-          <motion.h1
-            variants={itemVariants}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6"
-          >
-            <span className="text-white">Fair is the</span>
-            <br />
-            <span
-              className="font-serif italic bg-gradient-to-r from-[#E91E63] via-[#9D00FF] to-[#00BCD4] bg-clip-text text-transparent"
-              style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
-            >
-              Future.
+    <div className="bg-deep border-t border-b border-border py-3 overflow-hidden relative">
+      <div className="flex gap-12 animate-ticker w-max">
+        {items.map((item, i) => (
+          <div key={i} className="flex items-center gap-2">
+            {i > 0 && i % tickerItems.length !== 0 && (
+              <span className="text-white/10 text-base mx-2">◆</span>
+            )}
+            {item.dot && (
+              <span className="w-1.5 h-1.5 rounded-full bg-green shadow-[0_0_8px_var(--color-green)]" />
+            )}
+            <span className="font-mono text-xs text-muted whitespace-nowrap">
+              {item.label}
             </span>
-          </motion.h1>
+            <span
+              className={`font-mono text-xs whitespace-nowrap ${
+                item.green ? "text-green" : "text-text"
+              }`}
+            >
+              {item.value}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-          {/* Subheadline */}
-          <motion.p
-            variants={itemVariants}
-            className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed"
-          >
-            Bot-proof distribution. Real utility.{' '}
-            <span className="bg-gradient-to-r from-[#E91E63] to-[#9D00FF] bg-clip-text text-transparent font-medium">
-              1M ultra-rare tokens
-            </span>{' '}
-            on Base Chain.
-          </motion.p>
+export default function Hero() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const reducedMotion = useReducedMotion();
 
-          {/* CTA Buttons */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
-          >
-            <Link href="https://rare.claims" className="w-full sm:w-auto">
-              <button className="w-full sm:w-auto min-w-[180px] btn-primary">
-                Start Claiming
-              </button>
-            </Link>
-            <a href="#features" className="w-full sm:w-auto">
-              <button className="w-full sm:w-auto min-w-[180px] btn-ghost">
-                Learn More
-              </button>
-            </a>
-          </motion.div>
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const orbY = useTransform(scrollYProgress, [0, 1], ["0%", "55%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
 
-          {/* Stats */}
-          <motion.div
-            variants={itemVariants}
-            className="grid grid-cols-3 gap-4 md:gap-8 max-w-2xl mx-auto"
-          >
-            <div className="p-4 md:p-6 rounded-2xl bg-white/5 border border-white/10">
-              <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#E91E63] to-[#9D00FF] bg-clip-text text-transparent mb-1">1M</div>
-              <div className="text-xs md:text-sm text-white/60 uppercase tracking-wider">Total Supply</div>
-            </div>
-            <div className="p-4 md:p-6 rounded-2xl bg-white/5 border border-white/10">
-              <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#9D00FF] to-[#00BCD4] bg-clip-text text-transparent mb-1">Base</div>
-              <div className="text-xs md:text-sm text-white/60 uppercase tracking-wider">Chain</div>
-            </div>
-            <div className="p-4 md:p-6 rounded-2xl bg-white/5 border border-white/10">
-              <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#00BCD4] to-[#E91E63] bg-clip-text text-transparent mb-1">Bot-Proof</div>
-              <div className="text-xs md:text-sm text-white/60 uppercase tracking-wider">Security</div>
-            </div>
-          </motion.div>
-        </div>
-      </motion.div>
+  const fadeUp = (delay = 0) =>
+    reducedMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 30 },
+          animate: isInView ? { opacity: 1, y: 0 } : {},
+          transition: {
+            duration: 0.7,
+            delay,
+            ease: [0.25, 0.46, 0.45, 0.94] as const,
+          },
+        };
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20"
+  return (
+    <>
+      <section
+        ref={ref}
+        className="relative min-h-dvh flex items-end px-6 pt-28 pb-32 md:px-10 md:pb-28 overflow-hidden"
       >
+        {/* Backgrounds */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(ellipse 80% 60% at 20% 50%, rgba(246,51,255,0.10) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 80% at 80% 20%, rgba(50,53,251,0.07) 0%, transparent 60%),
+              radial-gradient(ellipse 100% 100% at 50% 100%, rgba(50,153,251,0.05) 0%, transparent 50%),
+              var(--color-void)
+            `,
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+            maskImage:
+              "radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%)",
+          }}
+        />
+
+        {/* Floating orb — parallax */}
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="w-6 h-10 rounded-full border-2 border-white/20 flex justify-center pt-2"
+          className="absolute -top-24 -right-24 w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full animate-orb-float opacity-10 pointer-events-none"
+          style={{
+            y: orbY,
+            background:
+              "conic-gradient(from 0deg, #F633FF, #9432FB, #3235FB, #3299FB, #9432FB, #F633FF)",
+            filter: "blur(100px)",
+          }}
+        />
+
+        {/* Content + Coin — scroll fade & lift */}
+        <motion.div
+          style={reducedMotion ? {} : { y: contentY, opacity: heroOpacity }}
+          className="relative z-2 w-full max-w-[1100px] mx-auto flex items-center justify-between gap-8 lg:gap-16"
         >
-          <div className="w-1.5 h-1.5 bg-[#9D00FF] rounded-full" />
+          {/* Text content */}
+          <div className="flex-1 max-w-[580px]">
+            <motion.div
+              {...fadeUp(0)}
+              className="font-mono text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-rare mb-5 flex items-center gap-3"
+            >
+              <span className="w-6 md:w-8 h-px bg-rare" />
+              Collaborative Wealth Protocol
+            </motion.div>
+
+            <motion.h1
+              {...fadeUp(0.1)}
+              className="text-[clamp(42px,8vw,96px)] leading-[0.95] tracking-[-0.03em] font-extrabold mb-2"
+            >
+              Earn.
+              <br />
+              <em className="font-serif italic font-light text-[1.15em] text-gradient">
+                Stake.
+              </em>
+              <br />
+              Own.
+            </motion.h1>
+
+            <motion.p
+              {...fadeUp(0.2)}
+              className="text-base md:text-lg text-muted leading-relaxed mb-8 md:mb-10 max-w-[500px]"
+            >
+              RARE COIN is an immutable self-distributing cryptocurrency now
+              live on Base — Coinbase&apos;s high-speed Ethereum Layer-2. 200
+              RARE are distributed every day, equally shared among claimers.
+            </motion.p>
+
+            <motion.div
+              {...fadeUp(0.3)}
+              className="flex flex-col sm:flex-row gap-3 mb-6"
+            >
+              <Link
+                href="#claim"
+                className="px-7 py-4 rounded-full bg-iridescent text-white font-bold text-sm uppercase tracking-[0.08em] no-underline text-center transition-all hover:opacity-85 hover:scale-[0.97]"
+              >
+                Claim $RARE
+              </Link>
+              <Link
+                href="#stake"
+                className="px-7 py-4 rounded-full border border-border-bright bg-glass text-text font-semibold text-sm uppercase tracking-[0.08em] no-underline text-center backdrop-blur-sm transition-all hover:border-rare/50 hover:bg-rare/8"
+              >
+                Stake Now
+              </Link>
+              <Link
+                href="#trade"
+                className="px-7 py-4 rounded-full border border-border-bright bg-glass text-text font-semibold text-sm uppercase tracking-[0.08em] no-underline text-center backdrop-blur-sm transition-all hover:border-rare/50 hover:bg-rare/8"
+              >
+                Buy $RARE
+              </Link>
+            </motion.div>
+
+            <motion.p
+              {...fadeUp(0.35)}
+              className="text-xs text-muted mb-8 tracking-wide"
+            >
+              Do you own v1 coins?{" "}
+              <Link
+                href="#"
+                className="text-shade1 no-underline border-b border-shade1/30 pb-px transition-colors hover:text-shade2 hover:border-shade2/60"
+              >
+                Claim conversion →
+              </Link>
+            </motion.p>
+
+            <motion.div
+              {...fadeUp(0.4)}
+              className="grid grid-cols-3 gap-4 md:gap-10"
+            >
+              {heroStats.map((stat) => (
+                <div key={stat.label}>
+                  <div className="font-mono text-lg md:text-[22px] font-bold text-gradient">
+                    {stat.value}
+                  </div>
+                  <div className="text-[10px] md:text-[11px] tracking-[0.1em] uppercase text-muted mt-0.5">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+          {/* end text content */}
+
+          {/* Coin (desktop only) */}
+          <div className="hidden lg:flex items-center justify-center flex-shrink-0">
+            <div className="relative">
+              {/* Orbital rings */}
+              <div
+                className="absolute rounded-full border border-rare/8 pointer-events-none"
+                style={{
+                  inset: "-28px",
+                  animation: "spin 18s linear infinite",
+                }}
+              />
+              <div
+                className="absolute rounded-full border border-rare-pink/5 pointer-events-none"
+                style={{
+                  inset: "-52px",
+                  animation: "spin 28s linear infinite reverse",
+                }}
+              />
+              <div
+                className="absolute rounded-full border border-rare-blue/4 pointer-events-none"
+                style={{
+                  inset: "-76px",
+                  animation: "spin 40s linear infinite",
+                }}
+              />
+              <motion.div
+                className="w-[280px] h-[280px] xl:w-[340px] xl:h-[340px] rounded-full p-[2px] animate-coin-glow"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #F633FF, #9432FB, #3235FB, #3299FB)",
+                }}
+                animate={reducedMotion ? {} : { rotate: [0, 360] }}
+                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+              >
+                <motion.div
+                  className="w-full h-full rounded-full bg-void flex items-center justify-center p-7"
+                  animate={reducedMotion ? {} : { rotate: [0, -360] }}
+                  transition={{
+                    duration: 15,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                >
+                  <Image
+                    src="/rare-logo.png"
+                    alt="Rare Coin"
+                    width={220}
+                    height={220}
+                    className="w-full h-full object-contain"
+                    priority
+                  />
+                </motion.div>
+              </motion.div>
+            </div>
+          </div>
         </motion.div>
-      </motion.div>
-    </section>
+        {/* end content + coin container */}
+
+        {/* Bottom link pills */}
+        <motion.div
+          {...fadeUp(0.5)}
+          className="absolute bottom-5 md:bottom-8 left-0 right-0 flex flex-col md:flex-row items-center justify-center gap-3 px-6 md:px-15"
+        >
+          <span className="font-mono text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-muted whitespace-nowrap">
+            Get Started
+          </span>
+          <div className="flex gap-2 flex-wrap justify-center">
+            {heroLinks.map((text) => (
+              <Link
+                key={text}
+                href="#"
+                className="px-3 py-1.5 rounded-full border border-border bg-glass text-muted text-[10px] md:text-[11px] no-underline whitespace-nowrap transition-all hover:text-text hover:border-rare/40 hover:bg-rare/7"
+              >
+                {text}
+              </Link>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      <TickerStrip />
+    </>
   );
 }

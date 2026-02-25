@@ -1,190 +1,173 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import Link from "next/link";
 
-function ProtocolCard({ 
-  title, 
-  description, 
-  children,
-  index 
-}: { 
-  title: string; 
-  description: string; 
-  children: React.ReactNode;
-  index: number;
-}) {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "center center"],
-  });
-
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
-  const blur = useTransform(scrollYProgress, [0, 1], [0, 20]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.5]);
-
-  return (
-    <motion.div
-      ref={ref}
-      style={{ scale, opacity }}
-      className="sticky top-20 min-h-[80vh] flex items-center justify-center p-6"
-    >
-      <motion.div
-        style={{ filter: useTransform(blur, (v) => `blur(${v}px)`) }}
-        className="w-full max-w-4xl bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 md:p-12"
-      >
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <span className="text-sm font-medium text-[#9D00FF] mb-2 block">
-              Protocol {index + 1}
-            </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              {title}
-            </h3>
-            <p className="text-white/60 leading-relaxed">
-              {description}
-            </p>
-          </div>
-          <div className="flex items-center justify-center">
-            {children}
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-// Animated circle logo
-function RotatingLogo() {
-  return (
-    <div className="relative w-48 h-48">
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-0 rounded-full bg-gradient-to-br from-[#E91E63] via-[#9D00FF] to-[#00BCD4] opacity-50 blur-xl"
-      />
-      <motion.div
-        animate={{ rotate: -360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-4 rounded-full bg-gradient-to-br from-[#E91E63] via-[#9D00FF] to-[#00BCD4] flex items-center justify-center shadow-lg shadow-[#9D00FF]/30"
-      >
-        <span className="text-6xl font-bold text-white">R</span>
-      </motion.div>
-    </div>
-  );
-}
-
-// Scanning laser grid
-function LaserGrid() {
-  return (
-    <div className="relative w-48 h-48 overflow-hidden rounded-2xl bg-[#111] border border-white/10">
-      {/* Grid lines */}
-      <div className="absolute inset-0 grid grid-cols-4 grid-rows-4 gap-px">
-        {[...Array(16)].map((_, i) => (
-          <div key={i} className="bg-white/5" />
-        ))}
-      </div>
-      
-      {/* Scanning line */}
-      <motion.div
-        animate={{ y: ["0%", "100%"] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-        className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00BCD4] to-transparent"
-      />
-      
-      {/* Glowing dots */}
-      {[...Array(8)].map((_, i) => (
-        <motion.div
-          key={i}
-          animate={{ opacity: [0.3, 1, 0.3] }}
-          transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
-          className="absolute w-2 h-2 rounded-full bg-[#9D00FF]"
-          style={{
-            left: `${10 + (i % 4) * 25}%`,
-            top: `${10 + Math.floor(i / 4) * 50}%`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-// Pulsing EKG waveform
-function EKGWave() {
-  return (
-    <div className="relative w-48 h-48 overflow-hidden rounded-2xl bg-[#111] border border-white/10">
-      <svg className="w-full h-full" viewBox="0 0 200 100" preserveAspectRatio="none">
-        <motion.path
-          d="M0 50 L30 50 L40 50 L50 20 L60 80 L70 50 L100 50 L110 50 L120 20 L130 80 L140 50 L200 50"
-          stroke="url(#ekgGradient)"
-          strokeWidth="2"
-          fill="none"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-        />
-        <defs>
-          <linearGradient id="ekgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#E91E63" />
-            <stop offset="50%" stopColor="#9D00FF" />
-            <stop offset="100%" stopColor="#00BCD4" />
-          </linearGradient>
-        </defs>
-      </svg>
-      
-      {/* Pulse dot */}
-      <motion.div
-        animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-        transition={{ duration: 1, repeat: Infinity }}
-        className="absolute top-1/2 left-1/4 w-3 h-3 rounded-full bg-[#E91E63] -translate-y-1/2"
-      />
-    </div>
-  );
-}
+const pools = [
+  {
+    badge: "Pool A",
+    icon: "🎯",
+    name: "Claimers",
+    tagline: "// equal_weight_dist.sol",
+    desc: "Claimers receive an equally distributed portion of the pool's daily supply. One coin is split fairly among all daily claimers — ensuring no whale advantage.",
+    spinDuration: 9,
+    requirements: [
+      "Connected to Base (Ethereum L2)",
+      "Small amount of ETH on Base for gas",
+      "BrightID verified human",
+      "One claim per wallet per day",
+    ],
+    gradient: "conic-gradient(from 0deg at 50% 50%, transparent 300deg, rgba(246,51,255,0.8) 340deg, rgba(148,50,251,0.5) 360deg)",
+  },
+  {
+    badge: "Pool B",
+    icon: "📈",
+    name: "Stakers",
+    tagline: "// stake_weighted_yield.sol",
+    desc: "Stakers earn daily interest from accrued trading network fees and receive additional Rare Coin for a set number of weeks by staking their collected RARE.",
+    spinDuration: 12,
+    requirements: [
+      "Must hold collected RARE coins",
+      "Weighted distribution by stake size",
+      "Earn trading fee dividends daily",
+      "Flexible unstaking available",
+    ],
+    gradient: "conic-gradient(from 0deg at 50% 50%, transparent 300deg, rgba(50,53,251,0.8) 340deg, rgba(50,153,251,0.5) 360deg)",
+  },
+];
 
 export default function Protocol() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const reducedMotion = useReducedMotion();
+
+  const fadeUp = (delay = 0) =>
+    reducedMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 30 },
+          animate: isInView ? { opacity: 1, y: 0 } : {},
+          transition: { duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] as const },
+        };
+
   return (
-    <section id="protocol" className="relative bg-[#050505]">
-      <div className="py-12">
-        <div className="text-center mb-12 px-6">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
-          >
-            The <span className="bg-gradient-to-r from-[#E91E63] via-[#9D00FF] to-[#00BCD4] bg-clip-text text-transparent">Protocol</span>
-          </motion.h2>
-          <p className="text-white/60 max-w-2xl mx-auto">
-            Our three-phase distribution system ensures fair and secure token allocation
+    <section ref={ref} id="distribution" className="relative bg-deep py-24 md:py-40 overflow-hidden">
+      {/* Grid background */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage: "linear-gradient(rgba(148,50,251,1) 1px, transparent 1px), linear-gradient(90deg, rgba(148,50,251,1) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+          maskImage: "radial-gradient(ellipse 75% 60% at 50% 50%, black 30%, transparent 100%)",
+        }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse 50% 60% at 50% 0%, rgba(148,50,251,0.08) 0%, transparent 70%)",
+        }}
+      />
+
+      <div className="relative z-10 max-w-[1100px] mx-auto px-6 md:px-15">
+        <motion.div {...fadeUp(0)}>
+          <div className="font-mono text-[10px] tracking-[0.5em] uppercase text-rare mb-4 flex items-center gap-3">
+            <span className="w-5 h-px bg-rare" />
+            Distribution Mechanics
+          </div>
+          <h2 className="text-[clamp(32px,5vw,64px)] font-extrabold tracking-[-0.03em] leading-[1.05] mb-6">
+            Two pools.
+            <br />
+            <em className="font-serif italic font-light text-[1.1em]">Infinite opportunity.</em>
+          </h2>
+          <p className="text-base md:text-lg text-muted leading-[1.7] max-w-[600px]">
+            200 RARE are released and distributed daily on Base. The system is elegantly simple and entirely on-chain.
           </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14 md:mt-20">
+          {pools.map((pool, i) => (
+            <motion.div key={pool.name} {...fadeUp(0.1 + i * 0.15)}>
+              {/* Spinning border wrapper */}
+              <div className="relative rounded-3xl p-px overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                {/* Spinning gradient ring */}
+                {!reducedMotion && (
+                  <motion.div
+                    className="absolute pointer-events-none"
+                    style={{
+                      inset: "-100%",
+                      background: pool.gradient,
+                      borderRadius: "inherit",
+                    }}
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: pool.spinDuration, repeat: Infinity, ease: "linear" }}
+                  />
+                )}
+
+                {/* Card content */}
+                <div className="relative bg-surface rounded-[22px] p-7 md:p-10 overflow-hidden">
+                  {/* Inner corner glow */}
+                  <div
+                    className="absolute top-0 right-0 w-48 h-48 pointer-events-none opacity-30"
+                    style={{
+                      background: i === 0
+                        ? "radial-gradient(circle at 100% 0%, rgba(246,51,255,0.3) 0%, transparent 60%)"
+                        : "radial-gradient(circle at 100% 0%, rgba(50,53,251,0.3) 0%, transparent 60%)",
+                    }}
+                  />
+
+                  {/* Pool badge + icon row */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-panel border border-border-bright flex items-center justify-center text-xl">
+                        {pool.icon}
+                      </div>
+                      <div>
+                        <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-muted/60 block">
+                          {pool.badge}
+                        </span>
+                        <h3 className="text-xl font-extrabold tracking-[-0.02em]">
+                          <span className="text-gradient">{pool.name}</span>{" "}Pool
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tagline */}
+                  <p className="font-mono text-[11px] text-muted/50 mb-4">{pool.tagline}</p>
+
+                  <p className="text-[14px] md:text-[15px] text-muted leading-[1.7] mb-7">{pool.desc}</p>
+
+                  {/* Requirements */}
+                  <div className="flex flex-col gap-3 mb-7">
+                    {pool.requirements.map((req, ri) => (
+                      <motion.div
+                        key={req}
+                        initial={reducedMotion ? false : { opacity: 0, x: -8 }}
+                        animate={isInView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ duration: 0.45, delay: 0.3 + i * 0.1 + ri * 0.07, ease: [0.25, 0.46, 0.45, 0.94] as const }}
+                        className="flex items-center gap-3 text-[13px] text-muted"
+                      >
+                        <span className="w-4 h-4 rounded-full border border-rare/40 flex items-center justify-center flex-shrink-0">
+                          <span className="w-1.5 h-1.5 rounded-full bg-rare/70" />
+                        </span>
+                        {req}
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <Link
+                    href="#"
+                    className="inline-flex items-center gap-2 text-[13px] font-semibold text-rare no-underline uppercase tracking-[0.04em] transition-all duration-200 hover:gap-3 group"
+                  >
+                    Learn More <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
-
-      <ProtocolCard
-        title="Secure Distribution"
-        description="Stake-to-Claim ensures only committed participants receive tokens. Our dual-pool system prevents gaming and ensures fair allocation across all participants."
-        index={0}
-      >
-        <RotatingLogo />
-      </ProtocolCard>
-
-      <ProtocolCard
-        title="Verified Participation"
-        description="Cloudflare Turnstile verification combined with on-chain analysis prevents bot farming while maintaining a smooth user experience for real humans."
-        index={1}
-      >
-        <LaserGrid />
-      </ProtocolCard>
-
-      <ProtocolCard
-        title="Long-Term Value"
-        description="With only 1M tokens ever created, early participants benefit from scarcity. Staking, lottery, and trading utilities create ongoing demand and ecosystem growth."
-        index={2}
-      >
-        <EKGWave />
-      </ProtocolCard>
     </section>
   );
 }
