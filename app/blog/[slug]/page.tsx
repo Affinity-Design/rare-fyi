@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getPostBySlug } from "@/lib/posts";
+import { getPostBySlug } from "../../../lib/posts";
 import { notFound } from "next/navigation";
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
