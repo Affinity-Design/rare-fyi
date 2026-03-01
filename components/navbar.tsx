@@ -25,19 +25,19 @@ const menuData = {
       icon: "📚",
       title: "Tutorials",
       desc: "Step-by-step guides",
-      href: "#tutorials",
+      href: "/blog?category=tutorial",
     },
     {
       icon: "🎓",
       title: "Learn",
       desc: "DeFi & Base education",
-      href: "#learn",
+      href: "/blog?category=education",
     },
     {
       icon: "📰",
       title: "News",
       desc: "Updates & announcements",
-      href: "/blog",
+      href: "/blog?category=news",
     },
   ],
   Apps: [
