@@ -4,6 +4,7 @@ import {
   Cormorant_Garamond,
   Space_Mono,
 } from "next/font/google";
+import Script from "next/script";
 import CustomCursor from "@/components/cursor";
 import "./globals.css";
 
@@ -40,6 +41,9 @@ export const metadata: Metadata = {
     "base chain",
     "bot-proof",
     "fair distribution",
+    "airdrop",
+    "staking",
+    "lottery",
   ],
   authors: [{ name: "Rare Coin" }],
   openGraph: {
@@ -49,12 +53,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Rare Coin",
+    images: [
+      {
+        url: "/rare-logo.png",
+        width: 800,
+        height: 600,
+        alt: "Rare Coin Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Rare Coin | Fair is the Future",
     description:
       "Bot-proof distribution. Real utility. 3.65M ultra-rare tokens on Base Chain.",
+    images: ["/rare-logo.png"],
   },
 };
 
@@ -63,12 +76,30 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
   return (
     <html
       lang="en"
       className={`scroll-smooth ${jakarta.variable} ${cormorant.variable} ${spaceMono.variable}`}
     >
       <body className="bg-void text-text antialiased">
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}');
+              `}
+            </Script>
+          </>
+        )}
         <CustomCursor />
         {children}
       </body>
