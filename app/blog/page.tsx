@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { posts as staticPosts } from "../../lib/static-posts";
@@ -15,7 +15,7 @@ const categories = [
   { id: "utility", label: "Utility", icon: "⚡" },
 ];
 
-export default function BlogPage() {
+function BlogContent() {
   const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState(() => {
@@ -187,5 +187,13 @@ export default function BlogPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function BlogPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-void" />}>
+      <BlogContent />
+    </Suspense>
   );
 }
